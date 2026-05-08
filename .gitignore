@@ -1,0 +1,14 @@
+# 環境変数
+.env
+.env.local
+.env.*.local
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
+
+# エディタ設定
+.vscode/
+.idea/
+*.swp
+*.swo
