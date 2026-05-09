@@ -122,10 +122,10 @@ export default function TransactionForm({
             <button
               type="button"
               onClick={() => setShowCalc(true)}
-              className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50"
-              title="電卓"
+              className="flex items-center gap-1.5 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-700 hover:bg-amber-100 transition-colors"
+              title="電卓で入力"
             >
-              🧮
+              🧮 <span className="text-xs">電卓</span>
             </button>
           </div>
           {errors.amount && (

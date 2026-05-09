@@ -34,17 +34,17 @@ export default function DonutChart({ data }: Props) {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={380}>
-      <PieChart>
+    <ResponsiveContainer width="100%" height={440}>
+      <PieChart margin={{ top: 20, right: 60, bottom: 20, left: 60 }}>
         <Pie
           data={chartData}
           cx="50%"
-          cy="45%"
-          innerRadius={80}
-          outerRadius={140}
+          cy="50%"
+          innerRadius={75}
+          outerRadius={120}
           dataKey="value"
           label={renderLabel}
-          labelLine={false}
+          labelLine={true}
         >
           {chartData.map((_, index) => (
             <Cell key={index} fill={COLORS[index % COLORS.length]} />

@@ -22,7 +22,7 @@ export default function TransactionTable({ transactions }: Props) {
 
   if (transactions.length === 0) {
     return (
-      <div className="rounded-lg bg-white p-8 text-center text-sm text-gray-500 shadow-sm border border-gray-100">
+      <div className="rounded-xl bg-white p-8 text-center text-sm text-gray-500 shadow-sm border border-blue-100">
         この月の収支データがありません
       </div>
     );
@@ -46,16 +46,20 @@ export default function TransactionTable({ transactions }: Props) {
         const dayExpense = items.filter(t => t.transaction_type === "expense").reduce((s, t) => s + t.amount, 0);
 
         return (
-          <div key={date} className="overflow-hidden rounded-lg bg-white shadow-sm border border-gray-100">
+          <div key={date} className="overflow-hidden rounded-xl bg-white shadow-sm border border-blue-100">
             {/* 日付ヘッダー */}
-            <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-2">
-              <span className="text-sm font-semibold text-gray-700">{formatDateLabel(date)}</span>
-              <div className="flex gap-3 text-xs">
+            <div className="flex items-center justify-between border-b border-blue-100 bg-blue-50 px-4 py-2.5">
+              <span className="text-sm font-bold text-blue-900">{formatDateLabel(date)}</span>
+              <div className="flex gap-2 text-xs">
                 {dayIncome > 0 && (
-                  <span className="text-blue-600">収入 {formatAmount(dayIncome)}</span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2.5 py-0.5 font-semibold text-blue-700 ring-1 ring-blue-200">
+                    ↑ {formatAmount(dayIncome)}
+                  </span>
                 )}
                 {dayExpense > 0 && (
-                  <span className="text-red-500">支出 {formatAmount(dayExpense)}</span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-0.5 font-semibold text-red-600 ring-1 ring-red-200">
+                    ↓ {formatAmount(dayExpense)}
+                  </span>
                 )}
               </div>
             </div>
@@ -67,7 +71,7 @@ export default function TransactionTable({ transactions }: Props) {
                   <tr
                     key={t.id}
                     onClick={() => router.push(`/transactions/${t.id}/edit`)}
-                    className="cursor-pointer border-b border-gray-50 hover:bg-gray-50 last:border-0"
+                    className="cursor-pointer border-b border-gray-50 hover:bg-blue-50/40 last:border-0 transition-colors"
                   >
                     <td className="px-4 py-2.5">
                       <span

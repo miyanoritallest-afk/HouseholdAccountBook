@@ -21,9 +21,11 @@ export default function NavBar() {
   };
 
   return (
-    <header className="border-b border-gray-200 bg-white shadow-sm">
+    <header className="bg-gradient-to-r from-blue-700 to-blue-500 shadow-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
-        <span className="text-lg font-bold text-gray-800">家計簿アプリ</span>
+        <span className="text-lg font-bold tracking-wide text-white">
+          💰 家計簿
+        </span>
         <nav className="flex items-center gap-1">
           {navLinks.map(({ href, label }) => (
             <Link
@@ -31,8 +33,8 @@ export default function NavBar() {
               href={href}
               className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                 pathname.startsWith(href)
-                  ? "bg-blue-50 text-blue-700"
-                  : "text-gray-600 hover:bg-gray-100"
+                  ? "bg-white/20 text-white"
+                  : "text-blue-100 hover:bg-white/10 hover:text-white"
               }`}
             >
               {label}
@@ -40,7 +42,7 @@ export default function NavBar() {
           ))}
           <button
             onClick={handleLogout}
-            className="ml-2 rounded-md px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100"
+            className="ml-2 rounded-md px-3 py-2 text-sm font-medium text-blue-100 hover:bg-white/10 hover:text-white transition-colors"
           >
             ログアウト
           </button>
