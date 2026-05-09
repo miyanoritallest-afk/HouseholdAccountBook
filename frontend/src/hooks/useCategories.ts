@@ -27,12 +27,12 @@ export function useCategories() {
   }, [fetch]);
 
   const create = async (name: string, category_type: CategoryType) => {
-    await apiClient.post("/api/v1/categories", { name, category_type });
+    await apiClient.post("/api/v1/categories", { category: { name, category_type } });
     await fetch();
   };
 
   const update = async (id: number, name: string) => {
-    await apiClient.put(`/api/v1/categories/${id}`, { name });
+    await apiClient.put(`/api/v1/categories/${id}`, { category: { name } });
     await fetch();
   };
 

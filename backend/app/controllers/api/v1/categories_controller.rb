@@ -32,7 +32,7 @@ module Api
         if @category.destroy
           render json: { message: "削除しました" }
         else
-          render json: { error: @category.errors.full_messages.first }, status: :bad_request
+          render json: { errors: @category.errors.full_messages }, status: :bad_request
         end
       end
 
@@ -43,11 +43,7 @@ module Api
       end
 
       def category_params
-        if params[:category].present?
-          params.require(:category).permit(:name, :category_type)
-        else
-          params.permit(:name, :category_type)
-        end
+        params.require(:category).permit(:name, :category_type)
       end
     end
   end

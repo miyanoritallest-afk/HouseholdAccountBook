@@ -4,6 +4,7 @@ import { getToken, clearAuthData, setSessionExpiredMessage } from "@/lib/auth";
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   headers: { "Content-Type": "application/json" },
+  timeout: 10000,
 });
 
 apiClient.interceptors.request.use((config) => {

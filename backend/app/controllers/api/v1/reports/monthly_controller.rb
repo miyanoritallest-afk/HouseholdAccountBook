@@ -3,8 +3,7 @@ module Api
     module Reports
       class MonthlyController < BaseController
         def show
-          year  = params[:year]&.to_i  || Date.current.year
-          month = params[:month]&.to_i || Date.current.month
+          year, month = parse_year_month
           range = Date.new(year, month).beginning_of_month..Date.new(year, month).end_of_month
 
           transactions = current_user.transactions.where(date: range)

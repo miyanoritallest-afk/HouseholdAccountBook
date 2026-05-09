@@ -40,7 +40,7 @@ export default function EditTransactionPage(props: { params: Promise<{ id: strin
     setErrors([]);
     setIsSubmitting(true);
     try {
-      await apiClient.put(`/api/v1/transactions/${transaction.id}`, data);
+      await apiClient.put(`/api/v1/transactions/${transaction.id}`, { transaction: data });
       router.push("/home");
     } catch (e) {
       const err = e as Error & { errors?: string[] };
