@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type Props = {
   onConfirm: (value: number) => void;
@@ -12,6 +12,33 @@ export default function Calculator({ onConfirm, onClose, initialValue = "" }: Pr
   const [display, setDisplay] = useState(initialValue || "0");
   const [expression, setExpression] = useState("");
   const [waitingForOperand, setWaitingForOperand] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el) return;
+
+    const focusable = el.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    first?.focus();
+
+    const trap = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last?.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first?.focus(); }
+        }
+      }
+      if (e.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", trap);
+    return () => document.removeEventListener("keydown", trap);
+  }, [onClose]);
 
   const handleDigit = (digit: string) => {
     if (waitingForOperand) {
@@ -35,14 +62,24 @@ export default function Calculator({ onConfirm, onClose, initialValue = "" }: Pr
   };
 
   const evaluate = (expr: string): number => {
-    try {
-      // 安全な四則演算のみ評価
-      const sanitized = expr.replace(/[^0-9+\-*/.()\s]/g, "");
-      // eslint-disable-next-line no-new-func
-      return new Function(`return ${sanitized}`)() as number;
-    } catch {
-      return 0;
+    // 数値と演算子（+, -, *, /, %）のトークン列をパース
+    const tokens = expr.match(/(\d+\.?\d*|[+\-*/%])/g);
+    if (!tokens || tokens.length < 3) return parseFloat(expr) || 0;
+
+    let result = parseFloat(tokens[0]);
+    let i = 1;
+    while (i < tokens.length - 1) {
+      const op = tokens[i];
+      const right = parseFloat(tokens[i + 1]);
+      if (isNaN(right)) break;
+      if (op === "+") result += right;
+      else if (op === "-") result -= right;
+      else if (op === "*") result *= right;
+      else if (op === "/") result = right !== 0 ? result / right : 0;
+      else if (op === "%") result = right !== 0 ? result % right : 0;
+      i += 2;
     }
+    return isFinite(result) ? result : 0;
   };
 
   const handleEquals = () => {
@@ -100,8 +137,9 @@ export default function Calculator({ onConfirm, onClose, initialValue = "" }: Pr
   const btnRed = `${btnBase} bg-red-50 text-red-600 hover:bg-red-100`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={onClose} role="dialog" aria-modal="true">
       <div
+        ref={panelRef}
         className="w-72 rounded-2xl bg-white p-4 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >

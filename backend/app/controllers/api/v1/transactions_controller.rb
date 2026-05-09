@@ -4,8 +4,7 @@ module Api
       before_action :set_transaction, only: [:show, :update, :destroy]
 
       def index
-        year  = params[:year]&.to_i  || Date.current.year
-        month = params[:month]&.to_i || Date.current.month
+        year, month = parse_year_month
 
         transactions = current_user.transactions
           .includes(:category)
@@ -58,11 +57,7 @@ module Api
       end
 
       def transaction_params
-        if params[:transaction].present?
-          params.require(:transaction).permit(:transaction_type, :amount, :category_id, :date, :memo)
-        else
-          params.permit(:transaction_type, :amount, :category_id, :date, :memo)
-        end
+        params.require(:transaction).permit(:transaction_type, :amount, :category_id, :date, :memo)
       end
 
       def transaction_json(t)

@@ -7,13 +7,13 @@ const SESSION_EXPIRED_KEY = "session_expired";
 export function saveAuthData(token: string, user: User): void {
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(USER_KEY, JSON.stringify(user));
-  document.cookie = `${TOKEN_KEY}=${token}; path=/`;
+  document.cookie = `${TOKEN_KEY}=${token}; path=/; SameSite=Strict`;
 }
 
 export function clearAuthData(): void {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
-  document.cookie = `${TOKEN_KEY}=; path=/; max-age=0`;
+  document.cookie = `${TOKEN_KEY}=; path=/; max-age=0; SameSite=Strict`;
 }
 
 export function getToken(): string | null {

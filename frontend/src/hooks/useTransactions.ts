@@ -40,12 +40,12 @@ export function useTransactions(year: number, month: number) {
   }, [fetch]);
 
   const create = async (data: TransactionFormData) => {
-    await apiClient.post("/api/v1/transactions", data);
+    await apiClient.post("/api/v1/transactions", { transaction: data });
     await fetch();
   };
 
   const update = async (id: number, data: TransactionFormData) => {
-    await apiClient.put(`/api/v1/transactions/${id}`, data);
+    await apiClient.put(`/api/v1/transactions/${id}`, { transaction: data });
     await fetch();
   };
 

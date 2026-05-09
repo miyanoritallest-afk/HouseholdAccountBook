@@ -19,7 +19,7 @@ export default function NewTransactionPage() {
     setErrors([]);
     setIsSubmitting(true);
     try {
-      await apiClient.post("/api/v1/transactions", data);
+      await apiClient.post("/api/v1/transactions", { transaction: data });
       router.push("/home");
     } catch (e) {
       const err = e as Error & { errors?: string[] };
