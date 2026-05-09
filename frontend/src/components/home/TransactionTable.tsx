@@ -7,9 +7,10 @@ type Props = {
   transactions: Transaction[];
 };
 
-function formatDate(dateStr: string) {
-  const [, m, d] = dateStr.split("-");
-  return `${parseInt(m)}/${parseInt(d)}`;
+function formatDateLabel(dateStr: string) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const dow = ["日", "月", "火", "水", "木", "金", "土"][new Date(y, m - 1, d).getDay()];
+  return `${m}月${d}日（${dow}）`;
 }
 
 function formatAmount(amount: number) {
@@ -27,50 +28,74 @@ export default function TransactionTable({ transactions }: Props) {
     );
   }
 
+  // 日付でグループ化（降順ソート済み前提）
+  const groups: { date: string; items: Transaction[] }[] = [];
+  for (const t of transactions) {
+    const last = groups[groups.length - 1];
+    if (last && last.date === t.date) {
+      last.items.push(t);
+    } else {
+      groups.push({ date: t.date, items: [t] });
+    }
+  }
+
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-sm border border-gray-100">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-gray-100 bg-gray-50">
-            <th className="px-4 py-3 text-left font-medium text-gray-600">日付</th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600">種別</th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600">カテゴリ</th>
-            <th className="px-4 py-3 text-right font-medium text-gray-600">金額</th>
-            <th className="px-4 py-3 text-left font-medium text-gray-600">メモ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactions.map((t) => (
-            <tr
-              key={t.id}
-              onClick={() => router.push(`/transactions/${t.id}/edit`)}
-              className="cursor-pointer border-b border-gray-50 hover:bg-gray-50 last:border-0"
-            >
-              <td className="px-4 py-3 text-gray-700">{formatDate(t.date)}</td>
-              <td className="px-4 py-3">
-                <span
-                  className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
-                    t.transaction_type === "income"
-                      ? "bg-blue-100 text-blue-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {t.transaction_type === "income" ? "収入" : "支出"}
-                </span>
-              </td>
-              <td className="px-4 py-3 text-gray-700">{t.category.name}</td>
-              <td
-                className={`px-4 py-3 text-right font-medium ${
-                  t.transaction_type === "income" ? "text-blue-600" : "text-red-600"
-                }`}
-              >
-                {formatAmount(t.amount)}
-              </td>
-              <td className="px-4 py-3 text-gray-500">{t.memo ?? ""}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-3">
+      {groups.map(({ date, items }) => {
+        const dayIncome  = items.filter(t => t.transaction_type === "income").reduce((s, t) => s + t.amount, 0);
+        const dayExpense = items.filter(t => t.transaction_type === "expense").reduce((s, t) => s + t.amount, 0);
+
+        return (
+          <div key={date} className="overflow-hidden rounded-lg bg-white shadow-sm border border-gray-100">
+            {/* 日付ヘッダー */}
+            <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-2">
+              <span className="text-sm font-semibold text-gray-700">{formatDateLabel(date)}</span>
+              <div className="flex gap-3 text-xs">
+                {dayIncome > 0 && (
+                  <span className="text-blue-600">収入 {formatAmount(dayIncome)}</span>
+                )}
+                {dayExpense > 0 && (
+                  <span className="text-red-500">支出 {formatAmount(dayExpense)}</span>
+                )}
+              </div>
+            </div>
+
+            {/* その日の明細 */}
+            <table className="w-full text-sm">
+              <tbody>
+                {items.map((t) => (
+                  <tr
+                    key={t.id}
+                    onClick={() => router.push(`/transactions/${t.id}/edit`)}
+                    className="cursor-pointer border-b border-gray-50 hover:bg-gray-50 last:border-0"
+                  >
+                    <td className="px-4 py-2.5">
+                      <span
+                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+                          t.transaction_type === "income"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {t.transaction_type === "income" ? "収入" : "支出"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2.5 text-gray-700">{t.category.name}</td>
+                    <td
+                      className={`px-4 py-2.5 text-right font-medium ${
+                        t.transaction_type === "income" ? "text-blue-600" : "text-red-600"
+                      }`}
+                    >
+                      {formatAmount(t.amount)}
+                    </td>
+                    <td className="px-4 py-2.5 text-gray-400 text-xs">{t.memo ?? ""}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -42,16 +42,16 @@ export default function CategoryList({ type, categories, onAdd, onUpdate, onDele
   };
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow-sm border border-gray-100">
-      <h2 className="mb-4 text-base font-semibold text-gray-700">{label}</h2>
+    <div className="rounded-lg bg-white p-8 shadow-sm border border-gray-100">
+      <h2 className="mb-5 text-lg font-semibold text-gray-700">{label}</h2>
 
-      <div className="divide-y divide-gray-50">
+      <div className="divide-y divide-gray-100">
         {categories.map((cat) => (
           <CategoryItem key={cat.id} category={cat} onUpdate={onUpdate} onDelete={onDelete} />
         ))}
       </div>
 
-      <div className="mt-4 flex items-center gap-2">
+      <div className="mt-5 flex items-center gap-3">
         <input
           type="text"
           value={newName}
@@ -59,12 +59,12 @@ export default function CategoryList({ type, categories, onAdd, onUpdate, onDele
           onKeyDown={(e) => e.key === "Enter" && handleAdd()}
           placeholder="新しいカテゴリ名"
           maxLength={20}
-          className="flex-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+          className="flex-1 rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
         />
         <button
           onClick={handleAdd}
           disabled={isAdding}
-          className="rounded-md bg-blue-600 px-4 py-1.5 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
+          className="rounded-md bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
         >
           追加
         </button>

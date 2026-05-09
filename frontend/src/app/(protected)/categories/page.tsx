@@ -16,7 +16,7 @@ export default function CategoriesPage() {
   if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div className="max-w-lg space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <h1 className="text-xl font-semibold text-gray-800">カテゴリ管理</h1>
       {error && <ErrorMessage messages={[error]} />}
       <CategoryList
