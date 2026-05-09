@@ -49,25 +49,25 @@ export default function CategoryItem({ category, onUpdate, onDelete }: Props) {
 
   if (isEditing) {
     return (
-      <div className="flex items-center gap-2 py-2">
+      <div className="flex items-center gap-3 py-3">
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           maxLength={20}
-          className="flex-1 rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+          className="flex-1 rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none"
           autoFocus
         />
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="rounded-md bg-blue-600 px-3 py-1.5 text-xs text-white hover:bg-blue-700 disabled:opacity-50"
+          className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
         >
           保存
         </button>
         <button
           onClick={() => { setIsEditing(false); setName(category.name); setError(""); }}
-          className="rounded-md border border-gray-300 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50"
+          className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
         >
           キャンセル
         </button>
@@ -78,18 +78,18 @@ export default function CategoryItem({ category, onUpdate, onDelete }: Props) {
 
   return (
     <>
-      <div className="flex items-center justify-between py-2">
+      <div className="flex items-center justify-between py-3">
         <span className="text-sm text-gray-700">{category.name}</span>
         <div className="flex gap-2">
           <button
             onClick={() => setIsEditing(true)}
-            className="rounded-md border border-gray-300 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
+            className="rounded-md border border-gray-300 px-4 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
           >
             編集
           </button>
           <button
             onClick={() => setShowConfirm(true)}
-            className="rounded-md border border-red-200 px-3 py-1 text-xs text-red-600 hover:bg-red-50"
+            className="rounded-md border border-red-200 px-4 py-1.5 text-sm text-red-600 hover:bg-red-50"
           >
             削除
           </button>

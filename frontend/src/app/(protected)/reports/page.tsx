@@ -44,9 +44,9 @@ export default function ReportsPage() {
 
       {summaryError && <ErrorMessage messages={[summaryError]} />}
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div className="rounded-lg bg-white p-6 shadow-sm border border-gray-100">
-          <h2 className="mb-4 text-base font-semibold text-gray-700">支出カテゴリ別</h2>
+      <div className="grid grid-cols-1 gap-6">
+        <div className="rounded-lg bg-white px-4 pt-5 pb-3 shadow-sm border border-gray-100">
+          <h2 className="mb-2 text-base font-semibold text-gray-700">支出カテゴリ別</h2>
           {summaryLoading ? (
             <LoadingSpinner />
           ) : (
@@ -54,8 +54,8 @@ export default function ReportsPage() {
           )}
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow-sm border border-gray-100">
-          <h2 className="mb-4 text-base font-semibold text-gray-700">月別収支推移（過去6ヶ月）</h2>
+        <div className="rounded-lg bg-white px-4 pt-5 pb-3 shadow-sm border border-gray-100">
+          <h2 className="mb-2 text-base font-semibold text-gray-700">月別収支推移（過去6ヶ月）</h2>
           {reportsLoading ? (
             <LoadingSpinner />
           ) : (

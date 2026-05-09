@@ -34,14 +34,14 @@ export default function DonutChart({ data }: Props) {
   };
 
   return (
-    <ResponsiveContainer width="100%" height={280}>
+    <ResponsiveContainer width="100%" height={380}>
       <PieChart>
         <Pie
           data={chartData}
           cx="50%"
-          cy="50%"
-          innerRadius={60}
-          outerRadius={100}
+          cy="45%"
+          innerRadius={80}
+          outerRadius={140}
           dataKey="value"
           label={renderLabel}
           labelLine={false}

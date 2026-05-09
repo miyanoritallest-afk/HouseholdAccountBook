@@ -13,7 +13,7 @@ module Api
           }, status: :ok
         end
 
-        def respond_to_on_destroy
+        def respond_to_on_destroy(non_navigational_status: :no_content, **)
           render json: { message: "ログアウトしました" }, status: :ok
         end
       end

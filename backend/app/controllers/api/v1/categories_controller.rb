@@ -4,10 +4,11 @@ module Api
       before_action :set_category, only: [:update, :destroy]
 
       def index
-        categories = current_user.categories.order(:category_type, :id)
-        render json: categories.group_by(&:category_type).transform_values do |cats|
-          cats.map { |c| { id: c.id, name: c.name } }
-        end
+        grouped = current_user.categories.order(:category_type, :id).group_by(&:category_type)
+        render json: {
+          expense: (grouped["expense"] || []).map { |c| { id: c.id, name: c.name } },
+          income:  (grouped["income"]  || []).map { |c| { id: c.id, name: c.name } },
+        }
       end
 
       def create
@@ -42,7 +43,11 @@ module Api
       end
 
       def category_params
-        params.require(:category).permit(:name, :category_type)
+        if params[:category].present?
+          params.require(:category).permit(:name, :category_type)
+        else
+          params.permit(:name, :category_type)
+        end
       end
     end
   end
