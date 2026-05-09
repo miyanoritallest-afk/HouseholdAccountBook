@@ -58,7 +58,11 @@ module Api
       end
 
       def transaction_params
-        params.require(:transaction).permit(:transaction_type, :amount, :category_id, :date, :memo)
+        if params[:transaction].present?
+          params.require(:transaction).permit(:transaction_type, :amount, :category_id, :date, :memo)
+        else
+          params.permit(:transaction_type, :amount, :category_id, :date, :memo)
+        end
       end
 
       def transaction_json(t)
