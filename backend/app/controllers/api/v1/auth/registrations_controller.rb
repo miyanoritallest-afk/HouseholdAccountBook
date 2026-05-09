@@ -13,7 +13,7 @@ module Api
         def respond_with(resource, _opts = {})
           if resource.persisted?
             render json: {
-              message: "ユーザー登録が完了しました",
+              token: request.env["warden-jwt_auth.token"],
               user: { id: resource.id, email: resource.email }
             }, status: :created
           else

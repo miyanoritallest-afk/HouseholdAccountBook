@@ -7,18 +7,22 @@ module Api
           month = params[:month]&.to_i || Date.current.month
           range = Date.new(year, month).beginning_of_month..Date.new(year, month).end_of_month
 
-          summary = current_user.transactions
+          amounts_by_category = current_user.transactions
             .expense
             .includes(:category)
             .where(date: range)
             .group(:category_id)
             .sum(:amount)
-            .map do |category_id, total|
-              category = Category.find(category_id)
-              { category_id: category_id, category_name: category.name, total: total }
-            end
 
-          render json: { year: year, month: month, category_summary: summary }
+          expense_total = amounts_by_category.values.sum
+
+          categories = amounts_by_category.map do |category_id, amount|
+            category = Category.find(category_id)
+            percentage = expense_total > 0 ? (amount.to_f / expense_total * 100).round : 0
+            { name: category.name, amount: amount, percentage: percentage }
+          end
+
+          render json: { year: year, month: month, categories: categories }
         end
       end
     end

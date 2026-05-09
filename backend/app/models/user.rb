@@ -12,8 +12,8 @@ class User < ApplicationRecord
   private
 
   DEFAULT_CATEGORIES = {
-    expense: %w[食費 日用品 交通費 娯楽費 医療費 衣服費 交際費 その他支出],
-    income: %w[給与 副収入 その他収入]
+    expense: %w[食費 交通費 娯楽費 日用品 医療費 光熱費 通信費 その他],
+    income: %w[給与 副業 その他]
   }.freeze
 
   def create_default_categories

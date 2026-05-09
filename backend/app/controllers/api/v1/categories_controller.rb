@@ -31,7 +31,7 @@ module Api
         if @category.destroy
           render json: { message: "削除しました" }
         else
-          render json: { errors: @category.errors.full_messages }, status: :unprocessable_entity
+          render json: { error: @category.errors.full_messages.first }, status: :bad_request
         end
       end
 
