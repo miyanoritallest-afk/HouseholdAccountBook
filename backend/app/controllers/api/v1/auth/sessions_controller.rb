@@ -8,7 +8,7 @@ module Api
 
         def respond_with(resource, _opts = {})
           render json: {
-            message: "ログインしました",
+            token: request.env["warden-jwt_auth.token"],
             user: { id: resource.id, email: resource.email }
           }, status: :ok
         end
