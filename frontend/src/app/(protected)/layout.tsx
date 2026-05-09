@@ -19,7 +19,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f0f4f8]">
       <NavBar />
       <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
     </div>
