@@ -12,3 +12,17 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Terraform - 機密情報・ローカル状態
+terraform/terraform.tfvars
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/bootstrap/.terraform/
+terraform/bootstrap/.terraform.lock.hcl
+terraform/bootstrap/terraform.tfstate
+terraform/bootstrap/terraform.tfstate.backup
+
+# 本番環境変数
+.env.production
