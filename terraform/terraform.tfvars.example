@@ -1,0 +1,11 @@
+# このファイルをコピーして terraform.tfvars を作成してください
+# terraform.tfvars は .gitignore で除外されています（絶対にコミットしないこと）
+
+# EC2へのSSH公開鍵
+# 生成方法: ssh-keygen -t ed25519 -f ~/.ssh/household-account
+# 以下のコマンドで確認: cat ~/.ssh/household-account.pub
+ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA... your_email@example.com"
+
+# SSHを許可する自分のIPアドレス
+# 確認方法: curl ifconfig.me
+allowed_ssh_cidr = "xxx.xxx.xxx.xxx/32"
