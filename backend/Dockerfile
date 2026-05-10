@@ -18,4 +18,4 @@ RUN chmod +x bin/*
 
 EXPOSE 3000
 
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb", "-p", "3000", "-e", "production"]
+CMD ["bundle", "exec", "puma", "-b", "tcp://0.0.0.0:3000", "-e", "production"]
