@@ -302,4 +302,5 @@ output "ssh_command" {
 output "rds_endpoint" {
   description = "RDSエンドポイント（EC2の.envに設定するDATABASE_HOST）"
   value       = aws_db_instance.main.address
+  sensitive   = true
 }

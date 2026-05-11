@@ -152,7 +152,7 @@ export default function Calculator({ onConfirm, onClose, initialValue = "" }: Pr
         {/* ボタングリッド */}
         <div className="grid grid-cols-4 gap-2">
           <button className={btnRed} onClick={handleClear}>C</button>
-          <button className={btnGray} onClick={handleBackspace}>⌫</button>
+          <button className={btnGray} onClick={handleBackspace} aria-label="バックスペース">⌫</button>
           <button className={btnGray} onClick={() => handleOperator("%")}>%</button>
           <button className={btnOrange} onClick={() => handleOperator("/")}>÷</button>
 
