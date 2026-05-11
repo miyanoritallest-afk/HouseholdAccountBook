@@ -97,6 +97,30 @@
 
 ---
 
+### 🟡 Terraform（インフラ）
+
+#### セキュリティ
+- [ ] **TF-SEC-1** `terraform.tfvars` が `.gitignore` に含まれていること（秘密情報の漏洩防止）
+- [ ] **TF-SEC-2** RDS が `publicly_accessible = false` になっていること
+- [ ] **TF-SEC-3** RDS セキュリティグループが EC2 SG 経由のみ 3306 を許可していること（CIDR 直指定でないこと）
+- [ ] **TF-SEC-4** SSH 許可の CIDR が `0.0.0.0/0` になっていないこと（管理者 IP に限定されていること）
+- [ ] **TF-SEC-5** Terraform state ファイル（`.tfstate`）が `.gitignore` に含まれていること
+- [ ] **TF-SEC-6** S3 バックエンドに暗号化（`encrypt = true`）が設定されていること
+
+#### 設計・運用
+- [ ] **TF-DES-1** すべてのリソースに `tags` が設定されていること（Project / ManagedBy 等）
+- [ ] **TF-DES-2** ハードコードされたアカウントID・ARN・IPがなく、変数または `data` ソース経由であること
+- [ ] **TF-DES-3** `required_version` と `required_providers` でバージョンが固定されていること
+- [ ] **TF-DES-4** `terraform.tfvars.example` が用意されていること（他者が `.tfvars` を再作成できること）
+- [ ] **TF-DES-5** 出力（`output`）に機密値が含まれる場合は `sensitive = true` が設定されていること
+
+#### コスト・リソース
+- [ ] **TF-COST-1** EC2 インスタンスタイプが無料枠対象（`t3.micro`）であること
+- [ ] **TF-COST-2** RDS インスタンスクラスが無料枠対象（`db.t3.micro`）であること
+- [ ] **TF-COST-3** 不要な Elastic IP・NAT Gateway・ALB が作成されていないこと（コスト発生源の確認）
+
+---
+
 ## レビュー手順
 
 1. 対象プロジェクトのバックエンド・フロントエンドの主要ファイルを読む
@@ -125,3 +149,5 @@
 | FE-SEC-3 | Cookie に SameSite 属性なし | ✅ 2026-05-09 |
 | FE-ROB-1 | axios にタイムアウト設定なし | ✅ 2026-05-09 |
 | A11Y-1〜3 | モーダルにフォーカストラップ・ARIA属性なし | ✅ 2026-05-09 |
+| A11Y-4 | Calculator バックスペースボタンに aria-label なし | ✅ 2026-05-11 |
+| TF-DES-5 | rds_endpoint output に sensitive = true がなかった | ✅ 2026-05-11 |
