@@ -17,13 +17,15 @@
 
 ## 技術スタック
 
-| レイヤー | 技術 |
-|----------|------|
-| フロントエンド | Next.js (React) |
-| バックエンド | Ruby on Rails（API モード） |
-| データベース | MySQL |
-| 認証 | devise（JWT） |
-| グラフ | Recharts |
+| レイヤー | 技術 | バージョン |
+|----------|------|-----------|
+| フロントエンド | Next.js (React / TypeScript) | Next.js 16.2.6 / React 19 |
+| バックエンド | Ruby on Rails（API モード） | Rails 7.1 / Ruby 3.3 |
+| データベース | MySQL | 8.0 |
+| 認証 | Devise + JWT | — |
+| グラフ | Recharts | 3.x |
+| インフラ | AWS EC2 + RDS（Terraform 管理） | — |
+| コンテナ | Docker / Docker Compose | — |
 
 ## 対応環境
 
@@ -106,11 +108,3 @@ open prototype/index.html
 | [インフラ構成](./docs/infrastructure.md) | AWS アーキテクチャ・Terraform 管理手順 |
 | [デプロイ手順](./docs/deployment.md) | 初回セットアップ・更新デプロイ・環境変数一覧 |
 
-## 今後の拡張候補（スコープ外）
-
-- HTTPS 化（独自ドメイン + ACM 証明書 + Route 53）
-- GitHub Actions による自動デプロイ
-- スマートフォン対応（レスポンシブデザイン）
-- レシート画像からの自動入力
-- 予算設定・予算アラート機能
-- CSV エクスポート機能
