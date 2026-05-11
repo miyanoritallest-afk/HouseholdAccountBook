@@ -12,3 +12,9 @@ variable "allowed_ssh_cidr" {
   type        = string
   description = "SSHを許可するIPアドレス（自分のIPを xx.xx.xx.xx/32 の形式で指定）"
 }
+
+variable "db_password" {
+  type        = string
+  sensitive   = true
+  description = "RDS MySQL admin パスワード（英数字のみ、16文字以上推奨）"
+}

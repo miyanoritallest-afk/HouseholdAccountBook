@@ -73,6 +73,23 @@ resource "aws_subnet" "public" {
   tags = { Name = "household-account-public-subnet" }
 }
 
+# RDS用プライベートサブネット（Multi-AZ要件のため2AZ必要）
+resource "aws_subnet" "db_a" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.10.0/24"
+  availability_zone = "${var.aws_region}a"
+
+  tags = { Name = "household-account-db-subnet-a" }
+}
+
+resource "aws_subnet" "db_c" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.11.0/24"
+  availability_zone = "${var.aws_region}c"
+
+  tags = { Name = "household-account-db-subnet-c" }
+}
+
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
@@ -133,6 +150,68 @@ resource "aws_security_group" "ec2" {
   }
 
   tags = { Name = "household-account-ec2-sg" }
+}
+
+# ---------------------------------------------------------------------------
+# RDS用セキュリティグループ（EC2のSGからのみ3306を許可）
+# ---------------------------------------------------------------------------
+
+resource "aws_security_group" "rds" {
+  name        = "household-account-rds-sg"
+  description = "RDS MySQL security group - EC2 only"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ec2.id]
+    description     = "MySQL from EC2 only"
+  }
+
+  tags = { Name = "household-account-rds-sg" }
+}
+
+# ---------------------------------------------------------------------------
+# RDS サブネットグループ
+# ---------------------------------------------------------------------------
+
+resource "aws_db_subnet_group" "main" {
+  name       = "household-account-db-subnet-group"
+  subnet_ids = [aws_subnet.db_a.id, aws_subnet.db_c.id]
+
+  tags = { Name = "household-account-db-subnet-group" }
+}
+
+# ---------------------------------------------------------------------------
+# RDS MySQL 8.0（db.t3.micro = 1年間無料枠）
+# ---------------------------------------------------------------------------
+
+resource "aws_db_instance" "main" {
+  identifier        = "household-account-mysql"
+  engine            = "mysql"
+  engine_version    = "8.0"
+  instance_class    = "db.t3.micro"
+  allocated_storage = 20
+  storage_type      = "gp2"
+
+  db_name  = "household_account_production"
+  username = "admin"
+  password = var.db_password
+
+  db_subnet_group_name   = aws_db_subnet_group.main.name
+  vpc_security_group_ids = [aws_security_group.rds.id]
+
+  # EC2と同じVPC内、インターネットからアクセス不可
+  publicly_accessible = false
+
+  backup_retention_period = 0
+  maintenance_window      = "Mon:04:00-Mon:05:00"
+
+  skip_final_snapshot = true
+  deletion_protection = false
+
+  tags = { Name = "household-account-mysql" }
 }
 
 # ---------------------------------------------------------------------------
@@ -218,4 +297,9 @@ output "app_url" {
 output "ssh_command" {
   description = "SSHログインコマンド"
   value       = "ssh -i ~/.ssh/household-account ec2-user@${aws_eip.main.public_ip}"
+}
+
+output "rds_endpoint" {
+  description = "RDSエンドポイント（EC2の.envに設定するDATABASE_HOST）"
+  value       = aws_db_instance.main.address
 }
