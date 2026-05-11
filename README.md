@@ -2,9 +2,26 @@
 
 個人の収入・支出を記録・管理し、家計の状況を可視化する家計簿Webアプリケーションです。
 
-## スクリーンショット（プロトタイプ）
+## スクリーンショット
 
-プロトタイプは `prototype/index.html` をブラウザで開くことで動作確認できます。
+### ログイン画面
+![ログイン画面](docs/images/login.png)
+
+### ホーム画面（収支一覧・カレンダー・月次集計）
+![ホーム画面](docs/images/home.png)
+
+### 収支登録（インライン電卓UI）
+![収支登録画面](docs/images/transaction-form.png)
+
+### カテゴリ管理
+![カテゴリ管理画面](docs/images/categories.png)
+
+### レポート（グラフ）
+![レポート画面](docs/images/report.png)
+
+### 操作デモ
+
+<video src="docs/images/demo.mp4" controls width="800"></video>
 
 ## 機能
 
