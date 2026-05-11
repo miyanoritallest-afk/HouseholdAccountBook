@@ -30,10 +30,64 @@
 - ブラウザ: Google Chrome 最新版
 - デバイス: PC のみ（推奨解像度: 横幅 1280px 以上）
 
+## 本番環境（AWS）
+
+| 項目 | 内容 |
+|------|------|
+| アクセス URL | http://18.179.100.96 |
+| フロントエンド | EC2 上の Next.js コンテナ（Port 80） |
+| バックエンド API | EC2 上の Rails コンテナ（Port 3000） |
+| データベース | RDS MySQL 8.0（EC2 からのみアクセス可） |
+| インフラ管理 | Terraform（`terraform/` ディレクトリ） |
+
+### コードを更新したときのデプロイ
+
+```bash
+bash scripts/deploy.sh
+```
+
+git pull → Docker イメージ再ビルド → db:migrate → ヘルスチェックを自動実行します。
+
+## ディレクトリ構成
+
+```
+.
+├── backend/                  # Rails API（Ruby 3.3 / Rails 7.1）
+│   ├── app/
+│   ├── config/
+│   ├── Dockerfile            # 本番用イメージ定義
+│   └── Gemfile
+├── frontend/                 # Next.js（React 19 / TypeScript）
+│   ├── src/
+│   ├── Dockerfile            # マルチステージビルド
+│   └── next.config.ts
+├── terraform/                # AWS インフラ定義（Terraform）
+│   ├── main.tf               # VPC・EC2・RDS・SG の定義
+│   ├── variables.tf
+│   ├── terraform.tfvars.example
+│   └── bootstrap/            # Terraform 状態管理用 S3/DynamoDB
+├── scripts/
+│   └── deploy.sh             # 本番デプロイスクリプト
+├── docs/                     # 設計ドキュメント
+├── docker-compose.yml        # ローカル開発用
+├── docker-compose.prod.yml   # 本番用（EC2 上で使用）
+└── prototype/                # HTML プロトタイプ
+```
+
+## ローカル開発の起動
+
+```bash
+# 依存関係のインストールと起動
+docker compose up -d
+
+# DB マイグレーション（初回のみ）
+docker compose exec api bundle exec rails db:migrate
+docker compose exec api bundle exec rails db:seed
+```
+
 ## プロトタイプの起動
 
 ```bash
-# ブラウザで直接開く
 open prototype/index.html
 ```
 
@@ -49,9 +103,13 @@ open prototype/index.html
 | [画面設計](./docs/screen-design.md) | 画面一覧・画面遷移図・ワイヤーフレーム |
 | [データベース設計](./docs/database-design.md) | テーブル定義・ER 図・制約 |
 | [API 設計](./docs/api-design.md) | エンドポイント一覧・リクエスト/レスポンス仕様 |
+| [インフラ構成](./docs/infrastructure.md) | AWS アーキテクチャ・Terraform 管理手順 |
+| [デプロイ手順](./docs/deployment.md) | 初回セットアップ・更新デプロイ・環境変数一覧 |
 
 ## 今後の拡張候補（スコープ外）
 
+- HTTPS 化（独自ドメイン + ACM 証明書 + Route 53）
+- GitHub Actions による自動デプロイ
 - スマートフォン対応（レスポンシブデザイン）
 - レシート画像からの自動入力
 - 予算設定・予算アラート機能
